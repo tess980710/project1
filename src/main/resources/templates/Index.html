@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+</head>
+<body>
+
+<div class="text-center">
+    <p>메인 페이지</p>
+    <div>
+
+
+        <a th:href="@{/}">메인페이지</a>
+
+
+        <li th:if="${session.user != null}">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit">로그아웃</button>
+            </form>
+        </li>
+        <li th:if="${session.user == null}">
+            <a th:href="@{/login}">로그인</a>
+        </li>
+    </div>
+    <li th:if="${session.user != null}">
+            <a th:href="@{/list}" >목록</a>
+        </form>
+    </li>
+
+</div>
+
+</body>
+</html>

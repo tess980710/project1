@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>상품 목록</title>
+</head>
+<body>
+<h1>상품 목록</h1>
+<div>
+  <a th:href="@{/}">메인페이지</a>
+
+  <li th:if="${session.user != null}">
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">로그아웃</button>
+    </form>
+  </li>
+</div>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>name</th>
+    <th>description</th>
+    <th>createdtime</th>
+    <th>updatedtime</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="item : ${list}" th:if="${session.user != null and session.user.id == item.userid}">
+    <td th:text="${item.name}"></td>
+    <td th:text="${item.description}"></td>
+    <td th:text="${item.createdtime}"></td>
+    <td th:text="${item.updatedtime}"></td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

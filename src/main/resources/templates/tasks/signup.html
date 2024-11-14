@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+<form th:action="@{/signup}" method="post">
+    <div>
+        <label for="id">아이디</label>
+        <input type="text" name="id" id="id" required>
+        <p th:text="${msg1}"></p>
+    </div>
+    <div>
+        <label for="password">패스워드</label>
+        <input type="password" name="password" id="password" required>
+        <p th:text="${msg2}"></p>
+    </div>
+    <div>
+        <label for="confirmPassword">패스워드 재확인</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+    </div>
+    <div>
+        <label for="username">이름</label>
+        <input type="text" name="username" id="username" required>
+    </div>
+
+    <button type="submit">회원가입</button>
+    <a th:href="@{/login}">뒤로가기</a>
+</form>
+
+</body>
+</html>
