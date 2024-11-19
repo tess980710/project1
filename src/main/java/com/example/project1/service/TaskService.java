@@ -7,6 +7,7 @@ import com.example.project1.repo.TaskRepo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class TaskService {
         Optional<UserDto> result = taskRepo.findByIdAndPassword(id, password);
         if (result.isPresent()) {
             session.setAttribute("user", result.get());
+            session.setAttribute("admin","admin");
             return true;
         } else {
             return false;
@@ -42,6 +44,8 @@ public class TaskService {
         taskRepo.save(dto);
         return "3";
     }
+
+
 
     public List<ItemDto> getAllItems() {
         UserDto user = (UserDto) session.getAttribute("user");
@@ -79,8 +83,9 @@ public class TaskService {
     }
 
 
-
-
+    public String getAdmin() {
+        return (String) session.getAttribute("admin");
+    }
 
 }
 

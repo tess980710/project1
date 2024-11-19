@@ -2,6 +2,7 @@ package com.example.project1.Controller;
 
 import com.example.project1.dto.ItemDto;
 import com.example.project1.dto.UserDto;
+import com.example.project1.repo.ItemRepo;
 import com.example.project1.service.TaskService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ public class IndexController {
     private final TaskService taskService;
     private final HttpSession session;
 
+    private final ItemRepo itemRepo;
+
     @GetMapping
     public String index() {
         return "Index";
@@ -35,6 +38,11 @@ public class IndexController {
     public String postLogin(@Validated @ModelAttribute UserDto dto) {
         boolean success = taskService.login(dto.getId(), dto.getPassword());
         if (success) {
+            if (dto.getId().equals("admin")) {
+                session.setAttribute("admin", "admin");
+            } else {
+                session.removeAttribute("admin");
+            }
             return "redirect:/";
         } else {
             return "tasks/login";
@@ -49,10 +57,20 @@ public class IndexController {
 
     @GetMapping("list")
     public String itemList(Model model) {
-        List<ItemDto> list = taskService.getAllItems();
+        String admin = taskService.getAdmin();
+        List<ItemDto> list;
+
+        if (admin != null) {
+            list = itemRepo.findAll();
+        } else {
+            UserDto user = (UserDto) session.getAttribute("user");
+            list = itemRepo.findByUserid(user.getId());
+        }
+        model.addAttribute("admin", admin);
         model.addAttribute("list", list);
         return "tasks/list";
     }
+
 
     @GetMapping("item/detail/{id}")
     public String itemDetail(@PathVariable("id") Integer id, Model model) {
