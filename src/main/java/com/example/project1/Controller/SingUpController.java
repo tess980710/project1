@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -21,30 +18,25 @@ public class SingUpController {
     private final TaskService taskService;
 
     @GetMapping
-    public String signup() {
+    public String getSignUp() {
         return "tasks/signup";
     }
 
     @PostMapping
-    public String saveUser(@Validated UserDto dto, @RequestParam String confirmPassword, Model model, RedirectAttributes redirectAttributes) {
-        String msg = taskService.SignUp(dto, confirmPassword);
+    public String postSignUp(@ModelAttribute UserDto dto,
+                             @RequestParam("confirmPassword") String confirmPassword,
+                             Model model) {
+        String msg = taskService.signUp(dto, confirmPassword);
 
         if (msg.equals("1")) {
-            model.addAttribute("msg2", "비밀번호가 일치하지 않습니다.");
+            model.addAttribute("message", "아이디가 중복됩니다.");
             return "tasks/signup";
-        }
-
-        if (msg.equals("2")) {
-            model.addAttribute("msg1", "아이디가 중복됩니다.");
+        } else if (msg.equals("2")) {
+            model.addAttribute("message", "비밀번호가 일치하지 않습니다.");
             return "tasks/signup";
-        }else{
-            redirectAttributes.addFlashAttribute("msg3", "회원가입 완료");
-            return "redirect:/login";
+        } else {
+            model.addAttribute("message", "회원가입 성공!");
+            return "tasks/login";
         }
-
-
-
-
-
     }
 }

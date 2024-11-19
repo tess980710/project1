@@ -13,4 +13,6 @@ public interface ItemRepo extends JpaRepository<ItemDto, Integer> {
 
 
     List<ItemDto> findByUserid(String id);
+
+    void deleteById(Integer id);
 }
